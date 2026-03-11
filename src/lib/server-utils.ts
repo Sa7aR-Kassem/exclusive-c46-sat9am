@@ -7,10 +7,12 @@ export async function getUserToken() {
         cookie.get("next-auth.session-token")?.value ||
         cookie.get("__Secure-next-auth.session-token")?.value;
     // console.log("addToCart", token);
-    const encodedToken = await decode({ token, secret: process.env.NEXTAUTH_SECRET! })
+    if (!token) {
+        return null;
+    }
+
+    const decoded = await decode({ token, secret: process.env.NEXTAUTH_SECRET! })
     // console.log("addToCart encodedToken", encodedToken?.accessToken);
 
-
-    return encodedToken?.accessToken
-
+    return decoded?.accessToken ?? null;
 }
